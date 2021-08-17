@@ -14,13 +14,20 @@ const addRecipe = (recipe, id) =>{
     list.innerHTML += html;
 }
 
-db.collection('recipes').get().then(snapshot=>{
-    snapshot.docs.forEach(doc => {
-        addRecipe(doc.data(), doc.id);
+// db.collection('recipes').get().then(snapshot=>{
+//     snapshot.docs.forEach(doc => {
+//         addRecipe(doc.data(), doc.id);
+//     });
+// }).catch(err =>{
+//     console.log(err);
+// });
+
+db.collection('recipes').onSnapshot(snapshot=>{
+    snapshot.docChanges().forEach(change => {
+        console.log(change);
     });
-}).catch(err =>{
-    console.log(err);
 });
+
 
 form.addEventListener('submit', e => {
     e.preventDefault();
