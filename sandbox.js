@@ -21,10 +21,24 @@ const addRecipe = (recipe, id) =>{
 // }).catch(err =>{
 //     console.log(err);
 // });
+const deleteRecipe = (id) => {
+    const recipes = document.querySelectorAll('li');
+    recipes.forEach(recipe =>{
+        if(recipe.getAttribute('data-id') === id){
+            recipe.remove();
+        }
+    }) 
+
+};
 
 db.collection('recipes').onSnapshot(snapshot=>{
     snapshot.docChanges().forEach(change => {
-        console.log(change);
+        const doc = change.doc;
+        if(change.type === 'added'){
+            addRecipe(doc.data(),doc.id);
+        } else if (change.type === 'removed'){
+            deleteRecipe(doc.id);
+        }
     });
 });
 
@@ -42,6 +56,7 @@ form.addEventListener('submit', e => {
     }).catch(err=>{
         console.log(err);
      })
+   form.reset(); 
 });
 
 list.addEventListener('click', e=>{
